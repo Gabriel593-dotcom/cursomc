@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "tb_categoria")
@@ -24,6 +24,7 @@ public class Categoria implements Serializable {
 	private Integer id;
 	private String nome;
 
+	@JsonManagedReference
 	@ManyToMany(mappedBy = "categorias")
 	private Set<Produto> produtos = new HashSet<>();
 
@@ -52,7 +53,6 @@ public class Categoria implements Serializable {
 		this.nome = nome;
 	}
 
-	@JsonIgnore
 	public Set<Produto> getProdutos() {
 		return produtos;
 	}
