@@ -36,7 +36,7 @@ public class Cliente implements Serializable {
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 
-	// Para quando não se há uma classe, mas precisa ser criada uma entidade
+	// Para quando não se há uma classe, mas precisa ser criada uma tabela
 	@ElementCollection
 	@CollectionTable(name = "tb_telefone")
 	private Set<String> telefones = new HashSet<>();
