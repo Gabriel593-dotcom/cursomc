@@ -13,6 +13,7 @@ import com.mycomp.cursomc.domain.Cliente;
 import com.mycomp.cursomc.domain.Endereco;
 import com.mycomp.cursomc.domain.Estado;
 import com.mycomp.cursomc.domain.EstadoPagamento;
+import com.mycomp.cursomc.domain.ItemPedido;
 import com.mycomp.cursomc.domain.Pagamento;
 import com.mycomp.cursomc.domain.PagamentoComBoleto;
 import com.mycomp.cursomc.domain.PagamentoComCartao;
@@ -24,6 +25,7 @@ import com.mycomp.cursomc.repositories.CidadeRepository;
 import com.mycomp.cursomc.repositories.ClienteRepository;
 import com.mycomp.cursomc.repositories.EnderecoRepository;
 import com.mycomp.cursomc.repositories.EstadoRepository;
+import com.mycomp.cursomc.repositories.ItemPedidoRepository;
 import com.mycomp.cursomc.repositories.PagamentoRepository;
 import com.mycomp.cursomc.repositories.PedidoRepository;
 import com.mycomp.cursomc.repositories.ProdutoRepository;
@@ -54,6 +56,9 @@ public class Instanciacao implements CommandLineRunner {
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -116,9 +121,21 @@ public class Instanciacao implements CommandLineRunner {
 		ped2.setPagamento(pagto2);
 
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
-		
+
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-		
+
+		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.0, 1, 2000.0);
+		ItemPedido ip2 = new ItemPedido(p3, ped1, 0.0, 2, 80.0);
+		ItemPedido ip3 = new ItemPedido(p2, ped2, 100.0, 1, 800.0);
+
+		ped1.getItensPedido().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItensPedido().addAll(Arrays.asList(ip3));
+
+		p1.getItensPedido().addAll(Arrays.asList(ip1));
+		p2.getItensPedido().addAll(Arrays.asList(ip3));
+		p3.getItensPedido().addAll(Arrays.asList(ip2));
+
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }
