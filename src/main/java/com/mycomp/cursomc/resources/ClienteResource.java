@@ -11,7 +11,7 @@ import com.mycomp.cursomc.domain.Cliente;
 import com.mycomp.cursomc.services.ClienteService;
 
 @RestController
-@RequestMapping(value = "clientes")
+@RequestMapping(value = "/clientes")
 public class ClienteResource {
 	
 	@Autowired
@@ -20,7 +20,7 @@ public class ClienteResource {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<Cliente> find(@PathVariable Integer id){
 		
-		Cliente obj = service.findById(id);
+		Cliente obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 	}
 }

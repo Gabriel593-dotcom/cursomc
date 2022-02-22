@@ -12,6 +12,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_pagamento")
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -53,6 +55,7 @@ public abstract class Pagamento implements Serializable {
 		this.estado = estado.getCode();
 	}
 
+	@JsonIgnore
 	public Pedido getPedido() {
 		return pedido;
 	}
