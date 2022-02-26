@@ -1,5 +1,6 @@
 package com.mycomp.cursomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,30 +17,34 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repo;
 
-	public Categoria buscar(Integer id) {
+	public List<Categoria> findAll() {
+		return repo.findAll();
+	}
 
+	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado."));
 	}
 
-	public Categoria inserirCategoria(Categoria obj) {
+	public Categoria insert(Categoria obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
 
-	public Categoria alterar(Categoria obj) {
-		buscar(obj.getId());
+	public Categoria update(Categoria obj) {
+		find(obj.getId());
 		return repo.save(obj);
 	}
 
-	public void deletar(Integer id) {
-		buscar(id);
+	public void delete(Integer id) {
+		find(id);
 		try {
 			repo.deleteById(id);
-		
-		} catch(Exception e) {
-			throw new DataIntegrityViolationExceptionCustom("Não é possível excluir uma Categoria que possui produtos atrelados.");
+
+		} catch (Exception e) {
+			throw new DataIntegrityViolationExceptionCustom(
+					"Não é possível excluir uma Categoria que possui produtos atrelados.");
 		}
-		
+
 	}
 }
