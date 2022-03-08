@@ -4,9 +4,10 @@ import java.time.Instant;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.mycomp.cursomc.services.exceptions.DataIntegrityViolationExceptionCustom;
@@ -21,7 +22,9 @@ public class ExceptionHandler {
 
 		String error = "Object Not Found";
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		return handlerBuilder(error, status, objectNotFoundException, request);
+		StandardError standardError = new StandardError(Instant.now(), status.value(), error, objectNotFoundException.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status.value()).body(standardError);
 	}
 
 	@org.springframework.web.bind.annotation.ExceptionHandler(com.mycomp.cursomc.services.exceptions.DataIntegrityViolationExceptionCustom.class)
@@ -30,15 +33,23 @@ public class ExceptionHandler {
 
 		String error = "Violation of the data integrity";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		return handlerBuilder(error, status, dataIntegrityViolationException, request);
-	}
-
-	private ResponseEntity<StandardError> handlerBuilder(String error, HttpStatus status, Exception e,
-			HttpServletRequest request) {
-
-		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+		StandardError standardError = new StandardError(Instant.now(), status.value(), error, dataIntegrityViolationException.getMessage(),
 				request.getRequestURI());
 		return ResponseEntity.status(status.value()).body(standardError);
 	}
 
+	@org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ValidationError> methodArgumentNotValid(HttpServletRequest request,
+			MethodArgumentNotValidException methodArgumentNotValidException) {
+
+		String error = "Method argument is not valid.";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ValidationError validationError = new ValidationError(Instant.now(), status.value(), error, "Erro de validação.",
+				request.getRequestURI());
+
+		for (FieldError x : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
+			validationError.addError(x.getField(), x.getDefaultMessage());
+		}
+		return ResponseEntity.status(status.value()).body(validationError);
+	}
 }
