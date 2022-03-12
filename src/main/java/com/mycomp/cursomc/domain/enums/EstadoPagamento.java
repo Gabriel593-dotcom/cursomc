@@ -1,4 +1,4 @@
-package com.mycomp.cursomc.domain;
+package com.mycomp.cursomc.domain.enums;
 
 public enum EstadoPagamento {
 

@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mycomp.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
 @Table(name = "tb_pagamento")
@@ -35,7 +36,7 @@ public abstract class Pagamento implements Serializable {
 	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estado = estado.getCode();
+		this.estado = (estado == null) ? null : estado.getCode();
 		this.pedido = pedido;
 	}
 
