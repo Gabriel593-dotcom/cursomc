@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycomp.cursomc.domain.Cidade;
 import com.mycomp.cursomc.domain.Cliente;
 import com.mycomp.cursomc.domain.Endereco;
+import com.mycomp.cursomc.domain.dto.ClienteDTO;
 import com.mycomp.cursomc.domain.dto.ClienteNewDTO;
 import com.mycomp.cursomc.domain.enums.TipoCliente;
 import com.mycomp.cursomc.repositories.ClienteRepository;
@@ -47,13 +48,13 @@ public class ClienteService {
 		return obj;
 	}
 
-	public Cliente update(Cliente obj) {
-		Cliente newObj = find(obj.getId());
+	public Cliente update(Integer id, ClienteDTO obj) {
+		Cliente newObj = find(id);
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
 
-	private void updateData(Cliente newObj, Cliente obj) {
+	private void updateData(Cliente newObj, ClienteDTO obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 	}
